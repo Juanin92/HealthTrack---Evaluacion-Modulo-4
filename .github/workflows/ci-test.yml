@@ -30,8 +30,3 @@ jobs:
         with:
           name: cobertura
           path: target/site/jacoco/index.html
-
-      - name: Análisis con SonarCloud
-        run: mvn sonar:sonar
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
