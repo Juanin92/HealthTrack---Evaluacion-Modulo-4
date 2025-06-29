@@ -1,0 +1,31 @@
+name: CI - HealthTrack
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Instalar Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+
+      - name: Ejecutar pruebas unitarias
+        run: mvn clean verify
+
+      - name: Subir reporte JaCoCo
+        uses: actions/upload-artifact@v2
+        with:
+          name: cobertura
+          path: target/site/jacoco/index.html
+
+      - name: Análisis con SonarQube
+        run: mvn sonar:sonar
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
